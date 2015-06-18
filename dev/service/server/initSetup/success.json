@@ -1,0 +1,231 @@
+{
+	"providerMap":
+	{
+		"digitalocean":
+		{
+			"name":"Digital Ocean",
+			"datacenters":
+			[
+				{
+					"id":"ams1",
+					"name":"amsterdam 1"
+				},
+				{
+					"id":"ams2",
+					"name":"amsterdam 2"
+				},
+				{
+					"id":"ams3",
+					"name":"amsterdam 3"
+				},
+				{
+					"id":"fra1",
+					"name":"frankfurt 1"
+				},
+				{
+					"id":"lon1",
+					"name":"london 1"
+				},
+				{
+					"id":"nyc1",
+					"name":"new york 1"
+				},
+				{
+					"id":"nyc2",
+					"name":"new york 2"
+				},
+				{
+					"id":"nyc3",
+					"name":"new york 3"
+				},
+				{
+					"id":"sfo1",
+					"name":"san francisco 1"
+				},
+				{
+					"id":"sgp1",
+					"name":"singapore 1"
+				}
+			],
+			"plans":
+			[
+				{
+					"id":"512mb",
+					"memory":"512mb",
+					"price":5.0
+				},
+				{
+					"id":"1gb",
+					"memory":"1gb",
+					"price":10.0
+				},
+				{
+					"id":"2gb",
+					"memory":"2gb",
+					"price":20.0
+				},
+				{
+					"id":"4gb",
+					"memory":"4gb",
+					"price":40.0
+				},
+				{
+					"id":"8gb",
+					"memory":"8gb",
+					"price":80.0
+				},
+				{
+					"id":"16gb",
+					"memory":"16gb",
+					"price":160.0
+				},
+				{
+					"id":"32gb",
+					"memory":"32gb",
+					"price":320.0
+				},
+				{
+					"id":"48gb",
+					"memory":"48gb",
+					"price":480.0
+				},
+				{
+					"id":"64gb",
+					"memory":"64gb",
+					"price":640.0
+				}
+			],
+			"distributionsMap":
+			{
+				"ubuntu":
+				[
+					{
+						"id":"ubuntu-15-04-x64",
+						"name":"ubuntu 15.04"
+					},
+					{
+						"id":"ubuntu-14-10-x64",
+						"name":"ubuntu 14.10"
+					},
+					{
+						"id":"ubuntu-14-04-x64",
+						"name":"ubuntu 14.04"
+					},
+					{
+						"id":"ubuntu-12-04-x64",
+						"name":"ubuntu 12.04.5"
+					}
+				]
+			}
+		},
+		"linode":
+		{
+			"name":"Linode",
+			"datacenters":
+			[
+				{
+					"id":"4",
+					"name":"atlanta"
+				},
+				{
+					"id":"2",
+					"name":"dallas"
+				},
+				{
+					"id":"3",
+					"name":"fremont"
+				},
+				{
+					"id":"7",
+					"name":"london"
+				},
+				{
+					"id":"6",
+					"name":"newark"
+				},
+				{
+					"id":"9",
+					"name":"singapore"
+				},
+				{
+					"id":"8",
+					"name":"tokyo"
+				}
+			],
+			"plans":
+			[
+				{
+					"id":"1",
+					"memory":"1gb",
+					"price":10.0
+				},
+				{
+					"id":"2",
+					"memory":"2gb",
+					"price":20.0
+				},
+				{
+					"id":"4",
+					"memory":"4gb",
+					"price":40.0
+				},
+				{
+					"id":"6",
+					"memory":"8gb",
+					"price":80.0
+				},
+				{
+					"id":"7",
+					"memory":"16gb",
+					"price":160.0
+				},
+				{
+					"id":"8",
+					"memory":"32gb",
+					"price":320.0
+				},
+				{
+					"id":"9",
+					"memory":"48gb",
+					"price":480.0
+				},
+				{
+					"id":"10",
+					"memory":"64gb",
+					"price":640.0
+				},
+				{
+					"id":"12",
+					"memory":"96gb",
+					"price":960.0
+				}
+			],
+			"distributionsMap":
+			{
+				"ubuntu":
+				[
+					{
+						"id":"139",
+						"name":"ubuntu 15.04"
+					},
+					{
+						"id":"133",
+						"name":"ubuntu 14.10"
+					},
+					{
+						"id":"124",
+						"name":"ubuntu 14.04"
+					},
+					{
+						"id":"126",
+						"name":"ubuntu 12.04"
+					},
+					{
+						"id":"65",
+						"name":"ubuntu 10.04"
+					}
+				]
+			}
+		}
+	}
+}

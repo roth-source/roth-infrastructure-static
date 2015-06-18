@@ -1,0 +1,85 @@
+<div id="progress-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content" style="background-color:#999">
+			<div class="modal-header" style="border:none;"><strong>Progress</strong></div>
+			<div class="panel-body" style="background-color:#222;color:#fff;">
+				<pre id="progress-text" style="background-color:#222;color:#fff;border:none;min-height:600px;"></pre>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-default" type="button" onclick="client.page.hideProgress();">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+(function()
+{
+	client.page.initProgress = function(response, success, error)
+	{
+		if(isSet(response.taskId))
+		{
+			success = isSet(success) ? success : function()
+			{
+				client.reloadPageComponents();
+			};
+			$("#progress-text").html("");
+			client.page.showProgress();
+			client.page.updateProgress(response.taskId, success, error);
+		}
+	};
+	
+	client.page.showProgress = function()
+	{
+		$("#progress-modal").modal(
+		{
+			backdrop 	: "static",
+			keyboard 	: false,
+			show 		: true
+		});
+	};
+	
+	client.page.updateProgress = function(taskId, success, error)
+	{
+		client.service("task", "getProgress", { taskId : taskId },
+		function(response)
+		{
+			if(isSet(response.progress))
+			{
+				client.page.addProgress(response.progress);
+				setTimeout(function()
+				{
+					client.page.updateProgress(taskId, success, error);
+				},
+				5000);
+			}
+			else
+			{
+				if(isFunction(success))
+				{
+					success();
+				}
+			}
+		},
+		function(errors)
+		{
+			if(isFunction(error))
+			{
+				error(errors);
+			}
+		});
+	};
+	
+	client.page.addProgress = function(text)
+	{
+		$("#progress-text").append(text);
+	};
+	
+	client.page.hideProgress = function()
+	{
+		$("#progress-modal").modal("hide");
+	};
+	
+})
+();
+</script>

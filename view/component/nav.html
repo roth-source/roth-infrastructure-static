@@ -1,0 +1,139 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand">Infrastructure</a>
+	</div>
+	<!--
+	<ul class="nav navbar-right top-nav">
+		<li class="dropdown">
+			<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> User <b class="caret"></b></a>
+			<ul class="dropdown-menu">
+				<li>
+					<a href="#"><i class="fa fa-fw fa-user"></i> Profile</a>
+				</li>
+				<li>
+					<a href="#"><i class="fa fa-fw fa-envelope"></i> Inbox</a>
+				</li>
+				<li>
+					<a href="#"><i class="fa fa-fw fa-gear"></i> Settings</a>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<a href="#"><i class="fa fa-fw fa-power-off"></i> Log Out</a>
+				</li>
+			</ul>
+		</li>
+	</ul>
+	-->
+	<div class="collapse navbar-collapse navbar-ex1-collapse">
+		<ul class="nav navbar-nav side-nav">
+			
+			{% if(layout.userType == "GLOBAL_ADMIN") %}
+			<li>
+				<a href="#/admin/orgs/"><i class="fa fa-fw fa-university"></i>&nbsp; Orgs</a>
+			</li>
+			<li>
+				<a href="#/admin/users/"><i class="fa fa-fw fa-user"></i>&nbsp; Users</a>
+			</li>
+			<li>
+				<a href="#/admin/dists/"><i class="fa fa-fw fa-file-archive-o"></i>&nbsp; Dists</a>
+			</li>
+			{% endif %}
+			{% for org in layout.orgs %}
+			<li>
+				<a class="side-divider"></a>
+			</li>
+			<li>
+				<a><i class="fa fa-fw fa-university"></i>&nbsp; {{ org.name }}</a>
+				<ul>
+					<li>
+						<a class="inactive" data-toggle="collapse" data-target="#providers-{{ org.id }}" style="cursor:pointer;"><i class="fa fa-fw fa-globe"></i>&nbsp; Providers <i class="fa fa-fw fa-caret-down"></i></a>
+						<ul id="providers-{{ org.id }}" class="collapse">
+							<li>
+								<a href="#/provider/registrars/id/{{ org.id }}"><i class="fa fa-fw fa-sitemap"></i>&nbsp; Registrars</a>
+							</li>
+							<li>
+								<a href="#/provider/authorities/id/{{ org.id }}"><i class="fa fa-fw fa-key"></i>&nbsp; Authorities</a>
+							</li>
+							<li>
+								<a href="#/provider/hosts/id/{{ org.id }}"><i class="fa fa-fw fa-cloud"></i>&nbsp; Hosts</a>
+							</li>
+							<li>
+								<a href="#/provider/nameservers/id/{{ org.id }}"><i class="fa fa-fw fa-search"></i>&nbsp; Nameservers</a>
+							</li>
+							<li>
+								<a href="#/provider/repos/id/{{ org.id }}"><i class="fa fa-fw fa-code"></i>&nbsp; Repos</a>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<a class="inactive" data-toggle="collapse" data-target="#config-{{ org.id }}" style="cursor:pointer;"><i class="fa fa-fw fa-cog"></i>&nbsp; Config <i class="fa fa-fw fa-caret-down"></i></a>
+						<ul id="config-{{ org.id }}" class="collapse">
+							<li>
+								<a href="#/org/members/id/{{ org.id }}"><i class="fa fa-fw fa-user"></i>&nbsp; Members</a>
+							</li>
+							<li>
+								<a href="#/org/domains/id/{{ org.id }}"><i class="fa fa-fw fa-sitemap"></i>&nbsp; Domains</a>
+							</li>
+							<li>
+								<a href="#/org/certs/id/{{ org.id }}"><i class="fa fa-fw fa-key"></i>&nbsp; Certs</a>
+							</li>
+							<li>
+								<a href="#/org/servers/id/{{ org.id }}"><i class="fa fa-fw fa-cloud"></i>&nbsp; Servers</a>
+							</li>
+							<li>
+								<a href="#/org/records/id/{{ org.id }}"><i class="fa fa-fw fa-search"></i>&nbsp; Records</a>
+							</li>
+							<li>
+								<a href="#/org/packages/id/{{ org.id }}"><i class="fa fa-fw fa-code"></i>&nbsp; Packages</a>
+							</li>
+							<li>
+								<a href="#/org/apps/id/{{ org.id }}"><i class="fa fa-fw fa-th"></i>&nbsp; Apps</a>
+							</li>
+						</ul>
+					</li>
+					{% for app in org.apps %}
+					<li>
+						<a class="inactive" data-toggle="collapse" data-target="#app-{{ app.id }}" style="cursor:pointer;"><i class="fa fa-fw fa-share-alt-square"></i>&nbsp; {{ app.name }} <i class="fa fa-fw fa-caret-down"></i></a>
+						<ul id="app-{{ app.id }}" class="collapse">
+							<li>
+								<a href="#/app/envs/id/{{ app.id }}"><i class="fa fa-fw fa-picture-o"></i>&nbsp; Envs</a>
+							</li>
+							<li>
+								<a href="#/app/webservers/id/{{ app.id }}"><i class="fa fa-fw fa-question"></i>&nbsp; Webservers</a>
+							</li>
+							<li>
+								<a href="#/app/virtualhosts/id/{{ app.id }}"><i class="fa fa-fw fa-question"></i>&nbsp; Virtualhosts</a>
+							</li>
+							<li>
+								<a href="#/app/sources/id/{{ app.id }}"><i class="fa fa-fw fa-code"></i>&nbsp; Sources</a>
+							</li>
+							<li>
+								<a href="#/app/branches/id/{{ app.id }}"><i class="fa fa-fw fa-question"></i>&nbsp; Branches</a>
+							</li>
+							<li>
+								<a href="#/app/targets/id/{{ app.id }}"><i class="fa fa-fw fa-question"></i>&nbsp; Targets</a>
+							</li>
+							<li>
+								<a href="#/app/releases/id/{{ app.id }}"><i class="fa fa-fw fa-question"></i>&nbsp; Releases</a>
+							</li>
+							<li>
+								<a href="#/app/deploys/id/{{ app.id }}"><i class="fa fa-fw fa-question"></i>&nbsp; Deploys</a>
+							</li>
+							<li>
+								<a href="#/app/contexts/id/{{ app.id }}"><i class="fa fa-fw fa-question"></i>&nbsp; Contexts</a>
+							</li>
+						</ul>
+					</li>
+					{% endfor %}
+				</ul>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</nav>

@@ -1,0 +1,177 @@
+{% for form in page.forms %}
+{% set formId = Id.generate() %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<strong>{{ form.title }}</strong>
+		</h3>
+	</div>
+	<div class="panel-body">
+		{% set multiple = (form.groups.length > 1) %}
+		{% if(multiple) %}
+		<div class="form-horizontal">
+			<div class="form-group">
+			<label for="{{ group-id }}" class="col-sm-{{ form.labelSize }} control-label">{{ form.label }}</label>
+			<div class="col-sm-{{ form.fieldSize }}">
+				<select class="form-control" placeholder="{{ form.placeholder }}" onchange="$('.form-{{ formId }}').hide(); $('#' + $(this).val()).show();">
+					{% for group in form.groups %}
+					<option value="group-{{ group.id }}">{{ group.name }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+		{% endif %}
+		{% for group in form.groups %}
+		<div id="group-{{ group.id }}" class="form-horizontal form-{{ formId }}" data-group="{{ group.id }}" style="display:{{ "none" if multiple else "block" }};">
+			{% for field in group.fields %}
+			{% set fieldId = group.id + "-" + field.name %}
+			
+			{% if(field.type == "hidden") %}
+			<input id="{{ fieldId }}" name="{{ field.name }}" class="form-control input" type="hidden" value="{{ field.value }}"/>
+			
+			{% elif(field.type == "textarea") %}
+			<div class="form-group">
+				<label for="{{ fieldId }}" class="col-sm-{{ form.labelSize }} control-label">{{ field.label }}</label>
+				<div class="col-sm-{{ form.fieldSize }} has-feedback">
+					<textarea id="{{ fieldId }}" name="{{ field.name }}" class="form-control input" data-required="{{ field.required }}" 
+						{% if(isSet(field.rows)) %}
+						rows="{{ field.rows }}"
+						{% endif %}
+					></textarea>
+					<i class="glyphicon form-control-feedback" aria-hidden="true"></i>
+				</div>
+			</div>
+			
+			{% elif(field.type == "checkbox") %}
+			<div class="form-group">
+				<label for="{{ fieldId }}" class="col-sm-{{ form.labelSize }} control-label">{{ field.label }}</label>
+				<div class="col-sm-1">
+					<i class="fa form-toggle" data-checkbox="{{ fieldId }}" style="cursor:pointer;margin-top:10px;"></i>
+					<input id="{{ fieldId }}" name="{{ field.name }}" type="checkbox" data-required="true" style="display:none;"
+						{% if(field.checked) %}
+						checked
+						{% endif %}
+						/>
+				</div>
+						
+			</div>
+			
+			{% elif(field.type == "date") %}
+			{% set containerId = Id.generate() %}
+			<div class="form-group">
+				<label for="{{ fieldId }}" class="col-sm-{{ form.labelSize }} control-label">{{ field.label }}</label>
+				<div class="col-sm-{{ form.fieldSize }}">
+					<div id="{{ containerId }}" class="input-group date has-feedback">
+						<span class="input-group-addon" onclick="$('#{{ fieldId }}').datepicker('show');">
+							<i class="glyphicon glyphicon-th"></i>
+						</span>
+						<input id="{{ fieldId }}" name="{{ field.name }}" class="form-control input" type="text" data-type="date" data-required="{{ field.required }}" data-provide="datepicker" data-date-format="{{ field.format }}" data-date-container="#{{ containerId }}" data-date-autoclose="true" />
+						<i class="glyphicon form-control-feedback" aria-hidden="true" style="right:0;"></i>
+					</div>
+				</div>
+			</div>
+			
+			{% elif(field.type == "select") %}
+			<div class="form-group">
+				<label for="create-type" class="col-sm-{{ form.labelSize }} control-label">{{ field.label }}</label>
+				<div class="col-sm-{{ form.fieldSize }} has-feedback">
+					<select id="{{ fieldId }}" name="{{ field.name }}" class="form-control" style="color:#333"
+						data-required="{{ field.required }}"
+						{% if(not field.selected) %}
+						placeholder="{{ field.placeholder }}"
+						{% endif %}
+						{% if(field.multiple) %}
+						multiple
+						{% endif %}
+						>
+						{% for option in field.options %}
+						{% if(option.options) %}
+						<optgroup label="{{ option.name }}">
+							{% for subOption in option.options %}
+							<option value="{{ subOption.value }}"
+								{% if(option.selected) %}
+								selected
+								{% endif %}
+								>
+								{{ subOption.name }}
+							</option>
+							{% endfor %}
+						</optgroup>
+						{% else %}
+						<option value="{{ option.value }}">{{ option.name }}</option>
+						{% endif %}
+						{% endfor %}
+					</select>
+					<i class="glyphicon form-control-feedback" aria-hidden="true" style="right:25px;"></i>
+				</div>
+			</div>
+			
+			{% else %}
+			<div class="form-group">
+				<label for="{{ fieldId }}" class="col-sm-{{ form.labelSize }} control-label">{{ field.label }}</label>
+				<div class="col-sm-{{ form.fieldSize }} has-feedback">
+					<input id="{{ fieldId }}" name="{{ field.name }}" class="form-control input" type="{{ field.type }}" placeholder="{{ field.placeholder }}"
+						data-required="{{ field.required }}" 
+						{% if(field.filter) %}
+						data-filter="{{ field.filter }}"
+						{% endif %}
+						{% if(field.validate) %}
+						data-validate="{{ field.validate }}"
+						{% endif %}
+						{% if(field.value) %}
+						value="{{ field.value }}"
+						{% endif %}
+						/>
+					<i class="glyphicon form-control-feedback" aria-hidden="true"></i>
+				</div>
+			</div>
+			{% endif %}
+			{% endfor %}
+			<div class="form-group">
+				<div class="col-sm-offset-{{ form.labelSize }} col-sm-{{ form.fieldSize }}">
+					<button class="btn btn-default"
+						data-disable="spinner"
+						data-submit="group"
+						data-service="{{ group.service }}"
+						data-method="{{ group.method }}"
+						{% if(group.success) %}
+						data-success="client.resetGroups(); {{ group.success }}"
+						{% else %}
+						data-success="client.resetGroups(); client.reloadPageComponents();"
+						{% endif %}
+						>
+						{{ group.submit }}
+					</button>
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+{% endfor %}
+
+<script>
+	$(".form-toggle").each(function()
+	{
+		var element = $(this);
+		var checkbox = element.attr("data-checkbox")
+		var checkboxElement = $("#" + checkbox);
+		element.addClass(checkboxElement.is(":checked") ? "fa-toggle-on" : "fa-toggle-off");
+		element.click(function()
+		{
+			if(checkboxElement.is(":checked"))
+			{
+				element.removeClass("fa-toggle-on");
+				element.addClass("fa-toggle-off");
+				checkboxElement.prop("checked", false);
+			}
+			else
+			{
+				element.removeClass("fa-toggle-off");
+				element.addClass("fa-toggle-on");
+				checkboxElement.prop("checked", true);
+			}
+			checkboxElement.change();
+		})
+	});
+</script>

@@ -1,0 +1,124 @@
+<div id="login-modal" class="modal" data-group="login" style="top:100px;">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Enter email and password</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form">
+					<div class="has-feedback" style="margin:5px 0;">
+						<input id="login-email" name="email" class="form-control input-lg" type="email" placeholder="email" data-required="true" data-validate="email"/>
+						<i class="glyphicon form-control-feedback" aria-hidden="true"></i>
+					</div>
+					<div class="has-feedback" style="margin:5px 0;">
+						<input id="login-password" name="password" class="form-control input-lg" type="password" placeholder="password" data-required="true" data-validate="password"/>
+						<i class="glyphicon form-control-feedback" aria-hidden="true"></i>
+					</div>
+					<div id="login-error" class="alert alert-danger" style="display:none;margin:5px 0;">email or password is incorrect</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="login" class="btn btn-lg btn-primary btn-block"
+					data-disable="spinner"
+					data-submit="group"
+					data-service="login"
+					data-method="submitLogin"
+					data-success="client.page.submit(response);">
+					login
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="create-modal" class="modal" data-group="create" style="top:100px;">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title">Create first global admin</h4>
+			</div>
+			<div class="modal-body">
+				<div class="form">
+					<div class="has-feedback" style="margin:5px 0;">
+						<input id="create-email" name="email" class="form-control input-lg" type="email" placeholder="email" data-required="true" data-validate="email"/>
+						<i class="glyphicon form-control-feedback" aria-hidden="true"></i>
+					</div>
+					<div class="has-feedback" style="margin:5px 0;">
+						<input id="create-password" name="password" class="form-control input-lg" type="password" placeholder="password" data-required="true" data-validate="password"/>
+						<i class="glyphicon form-control-feedback" aria-hidden="true"></i>
+					</div>
+					<div class="has-feedback" style="margin:5px 0;">
+						<input id="create-confirm" name="confirm" class="form-control input-lg" type="password" placeholder="confirm" data-required="true" data-validate="confirm:create-password"/>
+						<i class="glyphicon form-control-feedback" aria-hidden="true"></i>
+					</div>
+					<div id="create-error" class="alert alert-danger" style="display:none;margin:5px 0;">failed to create global admin</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button id="create" class="btn btn-lg btn-primary btn-block"
+					data-disable="spinner"
+					data-submit="group"
+					data-service="login"
+					data-method="createGlobalAdmin"
+					data-success="client.page.createGlobalAdmin(response);">
+					create
+				</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+(function()
+{
+	
+	client.page.init = function(response)
+	{
+		if(isDev())
+		{
+			client.request.next("admin", "orgs");
+		}
+		else
+		{
+			var element = isTrue(response.success) ? $("#login-modal") : $("#create-modal");
+			element.modal(
+			{
+				backdrop 	: "static",
+				keyboard 	: false,
+				show 		: true
+			});
+		}
+	};
+	
+	client.page.submit = function(response)
+	{
+		if(isTrue(response.success))
+		{
+			$("#login-modal").modal("hide");
+			if("GLOBAL_ADMIN" == response.userType)
+			{
+				client.request.next("admin", "orgs");
+			}
+		}
+		else
+		{
+			$("#login-error").show();
+		}
+	};
+	
+	client.page.createGlobalAdmin = function(response)
+	{
+		if(isTrue(response.success))
+		{
+			$("#create-modal").modal("hide");
+			client.request.next("admin", "orgs");
+		}
+		else
+		{
+			$("#create-error").show();
+		}
+	};
+	
+})
+();
+</script>

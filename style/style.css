@@ -1,0 +1,40 @@
+body
+{
+	font-family: "Inconsolata";
+	
+}
+
+.editable
+{
+	width: 100%;
+	color: #000;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.editor
+{
+	width: 100%;
+	display: none;
+	color: #555;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #b1a2c0;
+	border-radius: 4px;
+}
+
+input.editor
+{
+	margin: -2px;
+}
+
+select.editor
+{
+	margin: 1 0 -1 -5px;
+}
+
+.editor:focus
+{
+	border-color: #66afe9;
+	outline: 0;
+}

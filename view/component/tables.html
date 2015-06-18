@@ -1,0 +1,112 @@
+{% for table in page.tables %}
+<div class="panel panel-default">
+	<div class="panel-heading">
+		<h3 class="panel-title">
+			<strong>{{ table.title }}</strong>
+			<i class="fa fa-fw fa-refresh" style="float:right;cursor:pointer;" onclick="client.reloadPageComponents()"></i>
+		</h3>
+	</div>
+	<div class="panel-body">
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					{% for column in table.columns %}
+					<th style="width:{{ column.width }};">{{ column.label | safe}}</th>
+					{% endfor %}
+				</tr>
+			</thead>
+			<tbody>
+				{% for row in table.rows %}
+				<tr>
+					{% for column in table.columns %}
+					<td>
+						{% if(column.type == "text") %}
+						{% set editorId = Id.generate() %}
+						{% set text = render(column.renderers[0], column, row) %}
+						<a class="editable" data-editable="text" data-key="{{ row.id }}" data-service="{{ column.service }}" data-method="{{ column.method }}" data-name="{{ column.name }}" data-editor="{{ editorId }}">
+							{% if(isValidString(text)) %}
+							{{ text }}
+							{% else %}
+							&nbsp;
+							{% endif %}
+						</a>
+						<input id="{{ editorId }}" class="editor" type="text" />
+						
+						{% elif(column.type == "date") %}
+						{% set editorId = Id.generate() %}
+						{% set text = render(column.renderers[0], column, row) %}
+						<a class="editable" data-editable="date" data-key="{{ row.id }}" data-service="{{ column.service }}" data-method="{{ column.method }}" data-name="{{ column.name }}" data-editor="{{ editorId }}">
+							{% if(isValidString(text)) %}
+							{{ text }}
+							{% else %}
+							&nbsp;
+							{% endif %}
+						</a>
+						<input id="{{ editorId }}" class="editor" type="text" />
+						
+						{% elif(column.type == "select") %}
+						{% set editorId = Id.generate() %}
+						<a class="editable" data-editable="select" data-key="{{ row.id }}" data-service="{{ column.service }}" data-method="{{ column.method }}" data-name="{{ column.name }}" data-editor="{{ editorId }}">{{ render(column.renderers[0], column, row) }}</a>
+						<select id="{{ editorId }}" class="editor">
+							{% for option in column.options %}
+							<option value="{{ option.value }}">{{ option.name }}</option>
+							{% endfor %}
+						</select>
+						
+						{% elif(column.type == "checkbox") %}
+						{% set checkboxId = Id.generate() %}
+						<i class="fa editable-toggle" data-checkbox="{{ checkboxId }}" style="cursor:pointer;margin-top:4px;"></i>
+						<input id="{{ checkboxId }}" data-editable="checkbox" type="checkbox" data-key="{{ row.id }}" data-service="{{ column.service }}" data-method="{{ column.method }}" data-name="{{ column.name }}" style="display:none;"
+							{% if(render(column.renderers[0], column, row)) %}
+							checked
+							{% endif %}
+							/>
+						
+						{% elif(column.type == "menu") %}
+						<div class="dropdown" style="padding:3px;width:100%;text-align:center;">
+							{{ column.toggle | safe}}
+							<ul class="dropdown-menu dropdown-menu-right" role="menu">
+								<li role="presentation" class="disabled"><a>No Actions</a></li>
+							</ul>
+						</div>
+						
+						{% else %}
+						{% for renderer in column.renderers %}
+						{{ render(renderer, column, row) }}
+						{% endfor %}
+						{% endif %}
+					</td>
+					{% endfor %}
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endfor %}
+
+<script>
+	$(".editable-toggle").each(function()
+	{
+		var element = $(this);
+		var checkbox = element.attr("data-checkbox")
+		var checkboxElement = $("#" + checkbox);
+		element.addClass(checkboxElement.is(":checked") ? "fa-toggle-on" : "fa-toggle-off");
+		element.click(function()
+		{
+			if(checkboxElement.is(":checked"))
+			{
+				element.removeClass("fa-toggle-on");
+				element.addClass("fa-toggle-off");
+				checkboxElement.prop("checked", false);
+			}
+			else
+			{
+				element.removeClass("fa-toggle-off");
+				element.addClass("fa-toggle-on");
+				checkboxElement.prop("checked", true);
+			}
+			checkboxElement.change();
+		})
+	});
+</script>
